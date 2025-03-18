@@ -14,8 +14,8 @@
         <ComboBox Grid.Row="0"
                   IsEditable="True"
                   Text="Cars"
-                  ItemsSource="{Binding Products}"
-                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay}"
+                  ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
                   DisplayMemberPath="CarModel"/>
         
         
@@ -38,9 +38,6 @@
 
             <TextBlock Text="Фотография:" FontWeight="Bold" Margin="0,5,0,0"/>
             <TextBox Text="{Binding SelectedProduct.Img, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,0,0,5"/>
-
-            <TextBlock Text="Наличие:" FontWeight="Bold" Margin="0,5,0,0"/>
-            <TextBox Text="{Binding SelectedProduct.Available, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,0,0,5"/>
 
             <!--<TextBlock Text="Избранное:" FontWeight="Bold" Margin="0,5,0,0"/>
             <TextBox Text="{Binding SelectedProduct.IsFavourite, Mode=TwoWay}" Padding="5" Margin="0,0,0,5"/>

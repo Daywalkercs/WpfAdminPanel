@@ -14,6 +14,7 @@ namespace WpfAdminPanel.ViewModels
 {
     public class ProductViewModelLocal : INotifyPropertyChanged
     {
+        public Product product = new Product();
 
         private ObservableCollection<Product> _products;
         public ObservableCollection<Product> Products
@@ -25,6 +26,8 @@ namespace WpfAdminPanel.ViewModels
                 OnPropertyChanged(nameof(Products));
             }
         }
+
+
 
         private Product _selectedProduct;
         public Product SelectedProduct
@@ -42,14 +45,7 @@ namespace WpfAdminPanel.ViewModels
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
 
-        private string _carModel;
-        private string _shortDescription;
-        private string _longDescription;
-        private string _img;
-        private decimal _price;
-        private bool _isFavourite;
-        private bool _available;
-        private int _categoryId;
+
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -61,83 +57,55 @@ namespace WpfAdminPanel.ViewModels
 
         public string CarModel
         {
-            get => _carModel;
+            get => product.CarModel;
             set
             {
-                _carModel = value;
+                product.CarModel = value;
                 OnPropertyChanged(nameof(CarModel));
             }
         }
 
         public string ShortDescription
         {
-            get => _shortDescription;
+            get => product.ShortDescription;
             set
             {
-                _shortDescription = value;
+                product.ShortDescription = value;
                 OnPropertyChanged(nameof(ShortDescription));
             }
         }
 
         public string LongDescription
         {
-            get => _longDescription;
+            get => product.LongDescription;
             set
             {
-                _longDescription = value;
+                product.LongDescription = value;
                 OnPropertyChanged(nameof(LongDescription));
             }
         }
 
         public string Img
         {
-            get => _img;
+            get => product.Img;
             set
             {
-                _img = value;
+                product.Img = value;
                 OnPropertyChanged(nameof(Img));
             }
         }
 
         public decimal Price
         {
-            get => _price;
+            get => product.Price;
             set
             {
-                _price = value;
+                product.Price = value;
                 OnPropertyChanged(nameof(Price));
             }
         }
 
-        public bool IsFavourite
-        {
-            get => _isFavourite;
-            set
-            {
-                _isFavourite = value;
-                OnPropertyChanged(nameof(IsFavourite));
-            }
-        }
 
-        public bool Available
-        {
-            get => _available;
-            set
-            {
-                _available = value;
-                OnPropertyChanged(nameof(Available));
-            }
-        }
-
-        public int CategoryId
-        {
-            get => _categoryId;
-            set
-            {
-                _categoryId = value;
-                OnPropertyChanged(nameof(CategoryId));
-            }
-        }
 
 
         public ProductViewModelLocal()
@@ -146,7 +114,7 @@ namespace WpfAdminPanel.ViewModels
                 {
                     new Product {
                         CarModel = "BMW",
-                        Available = true,
+                        //Available = true,
                         //CategoryID = 1,
                         Id = 1,
                         Img = "Image BMW",
@@ -157,7 +125,7 @@ namespace WpfAdminPanel.ViewModels
                     },
                     new Product {
                         CarModel = "Mazda",
-                        Available = true,
+                        //Available = true,
                         //CategoryID = 1,
                         Id = 2,
                         Img = "Image Mazda",
@@ -168,7 +136,7 @@ namespace WpfAdminPanel.ViewModels
                     },
                         new Product {
                         CarModel = "Toyota",
-                        Available = true,
+                        //Available = true,
                         //CategoryID = 1,
                         Id = 3,
                         Img = "Image Toyota",
@@ -179,8 +147,8 @@ namespace WpfAdminPanel.ViewModels
                     }
                 };
 
-            LoadCommand = new RelayCommand( () => LoadProducts());
-            AddCommand = new RelayCommand( () =>  AddProduct());
+            LoadCommand = new RelayCommand(() => LoadProducts());
+            AddCommand = new RelayCommand(() => AddProduct());
             //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             //DeleteCommand = new RelayCommand(async () => await DeleteProduct());
 
@@ -197,7 +165,7 @@ namespace WpfAdminPanel.ViewModels
             {
                 Products.Add(product);
             }
-            
+            SelectedProduct = product;
         }
 
 
@@ -206,29 +174,32 @@ namespace WpfAdminPanel.ViewModels
             var newProduct = new Product
             {
                 Id = Products.Count + 1,
-                CarModel = CarModel,
-                ShortDescription = ShortDescription,
-                LongDescription = LongDescription,
-                Img = Img,
-                Price = Price,
+                CarModel = this.CarModel,
+                ShortDescription = this.ShortDescription,
+                LongDescription = this.LongDescription,
+                Img = this.Img,
+                Price = this.Price,
                 //IsFavourite = IsFavourite,
-                Available = Available,
+                //Available = Available,
                 //CategoryID = CategoryId
             };
 
+            //Products.Add(SelectedProduct);
             Products.Add(newProduct);
-            SelectedProduct = newProduct;
-            MessageBox.Show("Товар добавлен");
-
+            //SelectedProduct = newProduct;
 
             CarModel = string.Empty;
             ShortDescription = string.Empty;
             LongDescription = string.Empty;
             Img = string.Empty;
             Price = 0;
-            IsFavourite = false;
-            Available = false;
-            CategoryId = 0;
+            //IsFavourite = false;
+            //Available = false;
+            //CategoryId = 0;
+
+            MessageBox.Show("Товар добавлен");
+
+
             await LoadProducts();
 
 

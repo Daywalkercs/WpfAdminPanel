@@ -54,7 +54,7 @@ namespace WpfAdminPanel.ViewModels
                          Img = "New Image",
                          Price = 100,
                          //IsFavourite = true,
-                         Available = true,
+                         //Available = true,
                          //CategoryID = 1,
                                          };
             bool success = await _productService.CreateAsync(newProduct);
