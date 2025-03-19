@@ -42,6 +42,7 @@ namespace WpfAdminPanel.ViewModels
 
         public ICommand LoadCommand { get; }
         public ICommand AddCommand { get; }
+        public ICommand NewProductCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
 
@@ -148,8 +149,9 @@ namespace WpfAdminPanel.ViewModels
                 };
 
             LoadCommand = new RelayCommand(() => LoadProducts());
+            NewProductCommand = new RelayCommand(() => NewProduct());
             AddCommand = new RelayCommand(() => AddProduct());
-            //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
+            UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             //DeleteCommand = new RelayCommand(async () => await DeleteProduct());
 
             LoadProducts();
@@ -168,6 +170,16 @@ namespace WpfAdminPanel.ViewModels
             SelectedProduct = product;
         }
 
+        private void NewProduct()
+        {
+            CarModel = string.Empty;
+            ShortDescription = string.Empty;
+            LongDescription = string.Empty;
+            Img = string.Empty;
+            Price = 0;
+
+            SelectedProduct = product;
+        }
 
         private async Task AddProduct()
         {
@@ -205,18 +217,25 @@ namespace WpfAdminPanel.ViewModels
 
         }
 
-        //private async Task UpdateProduct()
-        //{
-        //    if (Products == null) return;
+        private async Task UpdateProduct()
+        {
+            if (SelectedProduct == null)
+            {
+                MessageBox.Show("Выберите товар для обновления!");
+                return;
+            }
 
-        //    SelectedProduct.CarModel += " (Обновлен)";
-        //    bool success = await _productService.UpdateAsync(SelectedProduct.Id, SelectedProduct);
-        //    if (success)
-        //    {
-        //        MessageBox.Show("Товар обновлен!");
-        //        await LoadProducts();
-        //    }
-        //}
+            Product productToUpdate = Products.FirstOrDefault(p => p.CarModel == SelectedProduct.CarModel);
+            if (productToUpdate == null) { MessageBox.Show("Ошибка выбора товара!"); return; }
+
+            //productToUpdate.CarModel = SelectedProduct.CarModel;
+            //productToUpdate.ShortDescription = SelectedProduct.ShortDescription;
+            //productToUpdate.LongDescription = SelectedProduct.LongDescription;
+            //productToUpdate.Img = SelectedProduct.Img;
+            //productToUpdate.Price = SelectedProduct.Price;
+
+            OnPropertyChanged(nameof(Products));
+        }
 
         //private async Task DeleteProduct()
         //{

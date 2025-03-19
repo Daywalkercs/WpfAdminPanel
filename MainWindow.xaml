@@ -15,8 +15,9 @@
                   IsEditable="True"
                   Text="Cars"
                   ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged }"
-                  DisplayMemberPath="CarModel"/>
+                  SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                  DisplayMemberPath="CarModel"/>   
+        
         
         
 
@@ -48,6 +49,7 @@
 
         <!-- Кнопки -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Content="Новый товар" Command="{Binding NewProductCommand}" Width="120" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="120" Margin="5"/>
             <Button Content="Обновить" Command="{Binding UpdateCommand}" Width="120" Margin="5"/>
             <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="120" Margin="5"/>
