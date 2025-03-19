@@ -9,6 +9,7 @@ using System.Windows.Input;
 using WpfAdminPanel.Helpers;
 using WpfAdminPanel.Models;
 using System.ComponentModel;
+using Microsoft.Win32;
 
 namespace WpfAdminPanel.ViewModels
 {
@@ -45,6 +46,7 @@ namespace WpfAdminPanel.ViewModels
         public ICommand NewProductCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand SelectImageCommand {  get; }
 
 
 
@@ -152,9 +154,25 @@ namespace WpfAdminPanel.ViewModels
             NewProductCommand = new RelayCommand(() => NewProduct());
             AddCommand = new RelayCommand(() => AddProduct());
             UpdateCommand = new RelayCommand(async () => await UpdateProduct());
+            SelectImageCommand = new RelayCommand(() => SelectImage());
             //DeleteCommand = new RelayCommand(async () => await DeleteProduct());
 
             LoadProducts();
+        }
+
+        private void SelectImage()
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog()
+            {
+                Filter = "Изображения (*.png; *.jpg; *.jpeg) | *.png;*.jpg;*.jpeg",
+                Title = "Выберите изображание"
+            };
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                SelectedProduct.Img = openFileDialog.FileName;
+                OnPropertyChanged(nameof(SelectedProduct));
+            }
         }
 
         private async Task LoadProducts()
