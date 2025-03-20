@@ -11,7 +11,5 @@ namespace WpfAdminPanel
             //DataContext = new ProductViewModel();
             DataContext = new ProductViewModelLocal();
         }
-
-
     }
 }

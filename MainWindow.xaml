@@ -60,23 +60,13 @@
                         Width="500"
                         Height="230"/>
             </Border>
-
-
-            <!--<TextBlock Text="Фотография:" FontWeight="Bold" Margin="0,5,0,0"/>
-            <TextBox Text="{Binding SelectedProduct.Img, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,0,0,5"/>-->
-
-            <!--<TextBlock Text="Избранное:" FontWeight="Bold" Margin="0,5,0,0"/>
-            <TextBox Text="{Binding SelectedProduct.IsFavourite, Mode=TwoWay}" Padding="5" Margin="0,0,0,5"/>
-
-            <TextBlock Text="Категория:" FontWeight="Bold" Margin="0,5,0,0"/>
-            <TextBox Text="{Binding SelectedProduct.CategoryID, Mode=TwoWay}" Padding="5" Margin="0,0,0,5"/>-->
         </StackPanel>
 
         <!-- Кнопки -->
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Content="Новый товар" Command="{Binding NewProductCommand}" Width="120" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="120" Margin="5"/>
-            <Button Content="Обновить" Command="{Binding UpdateCommand}" Width="120" Margin="5"/>
+            <!--<Button Content="Обновить" Command="{Binding UpdateCommand}" Width="120" Margin="5"/>-->
             <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="120" Margin="5"/>
         </StackPanel>
     </Grid>

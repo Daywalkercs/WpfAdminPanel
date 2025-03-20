@@ -153,9 +153,9 @@ namespace WpfAdminPanel.ViewModels
             LoadCommand = new RelayCommand(() => LoadProducts());
             NewProductCommand = new RelayCommand(() => NewProduct());
             AddCommand = new RelayCommand(() => AddProduct());
-            UpdateCommand = new RelayCommand(async () => await UpdateProduct());
+            //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             SelectImageCommand = new RelayCommand(() => SelectImage());
-            //DeleteCommand = new RelayCommand(async () => await DeleteProduct());
+            DeleteCommand = new RelayCommand(async () => await DeleteProduct());
 
             LoadProducts();
         }
@@ -218,11 +218,11 @@ namespace WpfAdminPanel.ViewModels
             Products.Add(newProduct);
             //SelectedProduct = newProduct;
 
-            CarModel = string.Empty;
-            ShortDescription = string.Empty;
-            LongDescription = string.Empty;
-            Img = string.Empty;
-            Price = 0;
+            //CarModel = string.Empty;
+            //ShortDescription = string.Empty;
+            //LongDescription = string.Empty;
+            //Img = string.Empty;
+            //Price = 0;
             //IsFavourite = false;
             //Available = false;
             //CategoryId = 0;
@@ -235,36 +235,48 @@ namespace WpfAdminPanel.ViewModels
 
         }
 
-        private async Task UpdateProduct()
-        {
-            if (SelectedProduct == null)
-            {
-                MessageBox.Show("Выберите товар для обновления!");
-                return;
-            }
-
-            Product productToUpdate = Products.FirstOrDefault(p => p.CarModel == SelectedProduct.CarModel);
-            if (productToUpdate == null) { MessageBox.Show("Ошибка выбора товара!"); return; }
-
-            //productToUpdate.CarModel = SelectedProduct.CarModel;
-            //productToUpdate.ShortDescription = SelectedProduct.ShortDescription;
-            //productToUpdate.LongDescription = SelectedProduct.LongDescription;
-            //productToUpdate.Img = SelectedProduct.Img;
-            //productToUpdate.Price = SelectedProduct.Price;
-
-            OnPropertyChanged(nameof(Products));
-        }
-
-        //private async Task DeleteProduct()
+        //private async Task UpdateProduct()
         //{
-        //    if (SelectedProduct == null) return;
-
-        //    bool success = await _productService.DeleteAsync(SelectedProduct.Id);
-        //    if (success)
+        //    if (SelectedProduct == null)
         //    {
-        //        MessageBox.Show("Товар удален!");
-        //        await LoadProducts();
+        //        MessageBox.Show("Выберите товар для обновления!");
+        //        return;
         //    }
+
+        //    Product productToUpdate = Products.FirstOrDefault(p => p.CarModel == SelectedProduct.CarModel);
+        //    if (productToUpdate == null) { MessageBox.Show("Ошибка выбора товара!"); return; }
+
+        //    OnPropertyChanged(nameof(Products));
         //}
+
+        private async Task DeleteProduct()
+        {
+            if (SelectedProduct == null) return;
+
+            MessageBoxResult result = MessageBox.Show("Удалить этот товар?", "Подтверждение удаления", MessageBoxButton.YesNo);
+            if (result == MessageBoxResult.No) return;
+
+            try
+            {
+                await Task.Delay(1000);
+                Products.Remove(SelectedProduct);
+
+                CarModel = string.Empty;
+                ShortDescription = string.Empty;
+                LongDescription = string.Empty;
+                Img = string.Empty;
+                Price = 0;
+                //IsFavourite = false;
+                //Available = false;
+                //CategoryId = 0;
+
+                await LoadProducts();
+                MessageBox.Show("Товар успешно удален.");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка удаления! {ex.Message}");
+            }
+        }
     }
 }
