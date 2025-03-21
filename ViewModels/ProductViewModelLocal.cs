@@ -10,6 +10,7 @@ using WpfAdminPanel.Helpers;
 using WpfAdminPanel.Models;
 using System.ComponentModel;
 using Microsoft.Win32;
+using System.Windows.Media.Imaging;
 
 namespace WpfAdminPanel.ViewModels
 {
@@ -46,9 +47,8 @@ namespace WpfAdminPanel.ViewModels
         public ICommand NewProductCommand { get; }
         public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
-        public ICommand SelectImageCommand {  get; }
-
-
+        public ICommand SelectImageCommand { get; }
+        public ICommand ImageDropCommand { get; }
 
 
         public event PropertyChangedEventHandler? PropertyChanged;
@@ -150,18 +150,38 @@ namespace WpfAdminPanel.ViewModels
                     }
                 };
 
-            LoadCommand = new RelayCommand(() => LoadProducts());
-            NewProductCommand = new RelayCommand(() => NewProduct());
-            AddCommand = new RelayCommand(() => AddProduct());
+            LoadCommand = new RelayCommand<object>(_ => LoadProducts());
+            NewProductCommand = new RelayCommand<object>(_ => NewProduct());
+            AddCommand = new RelayCommand<object>(_ => AddProduct());
             //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
-            SelectImageCommand = new RelayCommand(() => SelectImage());
-            DeleteCommand = new RelayCommand(async () => await DeleteProduct());
+            SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
+            DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
+            ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
 
             LoadProducts();
         }
 
+        private void OnImageDropped(DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+                if (files.Length > 0 && SelectedProduct is not null)
+                {
+                    SelectedProduct.Img = files[0];
+                    OnPropertyChanged(nameof(SelectedProduct));
+                }
+            }
+        }
+
         private void SelectImage()
         {
+            if (SelectedProduct is null)
+            {
+                MessageBox.Show("Выберите товар для изменения изображения");
+                return;
+            }
+
             OpenFileDialog openFileDialog = new OpenFileDialog()
             {
                 Filter = "Изображения (*.png; *.jpg; *.jpeg) | *.png;*.jpg;*.jpeg",
@@ -175,79 +195,35 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private async Task LoadProducts()
+        private void LoadProducts()
         {
-            await Task.Delay(1000);
-
-            var UpdatedProducts = new ObservableCollection<Product>(Products);
-            Products.Clear();
-            foreach (var product in UpdatedProducts)
-            {
-                Products.Add(product);
-            }
-            SelectedProduct = product;
+            OnPropertyChanged(nameof(Products));
+            SelectedProduct = new Product();
         }
+
+
 
         private void NewProduct()
         {
-            CarModel = string.Empty;
-            ShortDescription = string.Empty;
-            LongDescription = string.Empty;
-            Img = string.Empty;
-            Price = 0;
+            SelectedProduct = new Product();
+            OnPropertyChanged(nameof(SelectedProduct));
 
-            SelectedProduct = product;
         }
 
         private async Task AddProduct()
         {
-            var newProduct = new Product
+            if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {
-                Id = Products.Count + 1,
-                CarModel = this.CarModel,
-                ShortDescription = this.ShortDescription,
-                LongDescription = this.LongDescription,
-                Img = this.Img,
-                Price = this.Price,
-                //IsFavourite = IsFavourite,
-                //Available = Available,
-                //CategoryID = CategoryId
-            };
+                MessageBox.Show("Заполните поля");
+                return;
+            }
 
-            //Products.Add(SelectedProduct);
-            Products.Add(newProduct);
-            //SelectedProduct = newProduct;
-
-            //CarModel = string.Empty;
-            //ShortDescription = string.Empty;
-            //LongDescription = string.Empty;
-            //Img = string.Empty;
-            //Price = 0;
-            //IsFavourite = false;
-            //Available = false;
-            //CategoryId = 0;
-
+            SelectedProduct.Id = Products.Count + 1;
+            Products.Add(SelectedProduct);
             MessageBox.Show("Товар добавлен");
-
-
-            await LoadProducts();
-
-
+            LoadProducts();
         }
 
-        //private async Task UpdateProduct()
-        //{
-        //    if (SelectedProduct == null)
-        //    {
-        //        MessageBox.Show("Выберите товар для обновления!");
-        //        return;
-        //    }
-
-        //    Product productToUpdate = Products.FirstOrDefault(p => p.CarModel == SelectedProduct.CarModel);
-        //    if (productToUpdate == null) { MessageBox.Show("Ошибка выбора товара!"); return; }
-
-        //    OnPropertyChanged(nameof(Products));
-        //}
 
         private async Task DeleteProduct()
         {
@@ -261,16 +237,8 @@ namespace WpfAdminPanel.ViewModels
                 await Task.Delay(1000);
                 Products.Remove(SelectedProduct);
 
-                CarModel = string.Empty;
-                ShortDescription = string.Empty;
-                LongDescription = string.Empty;
-                Img = string.Empty;
-                Price = 0;
-                //IsFavourite = false;
-                //Available = false;
-                //CategoryId = 0;
-
-                await LoadProducts();
+                SelectedProduct = null;
+                OnPropertyChanged(nameof (SelectedProduct));
                 MessageBox.Show("Товар успешно удален.");
             }
             catch (Exception ex)
