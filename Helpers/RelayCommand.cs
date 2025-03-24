@@ -18,16 +18,39 @@ namespace WpfAdminPanel.Helpers
             _canExecute = canExecute;
         }
 
+        //public bool CanExecute(object parameter)
+        //{
+        //    bool result = _canExecute == null || (parameter is T param && _canExecute(param));
+        //    Debug.WriteLine($"CanExecute({parameter}): {result}");
+        //    return result;
+        //}
+
         public bool CanExecute(object parameter)
         {
-            bool result = _canExecute == null || (parameter is T param && _canExecute(param));
+            bool result;
+
+            if (_canExecute == null)
+            {
+                result = true; // Команда всегда доступна
+            }
+            else if (parameter is T param)
+            {
+                result = _canExecute(param);
+            }
+            else
+            {
+                result = _canExecute(default); // Передаём `default(T)`, если параметр `null`
+            }
+
             Debug.WriteLine($"CanExecute({parameter}): {result}");
             return result;
         }
-        
-            
+
+
         public void Execute(object parameter) 
         {
+            Debug.WriteLine($"Execute called with parameter: {parameter?.GetType().FullName ?? "null"}");
+
             if (parameter is T param)
             {
                 Debug.WriteLine($"Executing command with parameter: {param}");
@@ -35,7 +58,9 @@ namespace WpfAdminPanel.Helpers
             }
             else
             {
+
                 Debug.WriteLine($"Executing command without parameter");
+                Debug.WriteLine(parameter);
                 _execute(default(T));
             }
         }

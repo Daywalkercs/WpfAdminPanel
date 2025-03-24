@@ -1,14 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace WpfAdminPanel.Models
 {
-    public class Product
+    public class Product : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
         private int _id;
         public int Id
         {
@@ -41,7 +49,11 @@ namespace WpfAdminPanel.Models
         public string Img
         {
             get => _img;
-            set => _img = value;
+            set 
+            {
+                _img = value;
+                OnPropertyChanged();
+            }
         }
 
         private decimal _price;

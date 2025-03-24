@@ -156,8 +156,8 @@ namespace WpfAdminPanel.ViewModels
             //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
+            //ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped, _ => true);
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
-
             LoadProducts();
         }
 
@@ -168,7 +168,8 @@ namespace WpfAdminPanel.ViewModels
                 string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
                 if (files.Length > 0 && SelectedProduct is not null)
                 {
-                    SelectedProduct.Img = files[0];
+                    string imagePath = files[0];
+                    SelectedProduct.Img = imagePath;
                     OnPropertyChanged(nameof(SelectedProduct));
                 }
             }

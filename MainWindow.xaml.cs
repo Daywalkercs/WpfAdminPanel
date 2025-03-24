@@ -14,16 +14,26 @@ namespace WpfAdminPanel
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-            {
-                e.Effects = DragDropEffects.Copy;
-            }
-            else
-            {
-                e.Effects = DragDropEffects.None;
-            }
             e.Handled = true;
+            e.Effects = DragDropEffects.Copy;
         }
 
+        //private void Border_PreviewDragOver(object sender, DragEventArgs e)
+        //{
+        //    if (e.Data.GetDataPresent(DataFormats.FileDrop))
+        //    {
+        //        e.Effects = DragDropEffects.Copy;
+        //    }
+        //    else
+        //    {
+        //        e.Effects = DragDropEffects.None;
+        //    }
+        //    e.Handled = true;
+        //}
+
+        //private void Border_Drop(object sender, DragEventArgs e)
+        //{
+        //    e.Handled = true;
+        //}
     }
 }
