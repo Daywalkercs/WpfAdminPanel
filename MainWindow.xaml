@@ -7,7 +7,7 @@
 
     <Window.Resources>
         <local:ImagePathToBitmapConverter x:Key="ImagePathConverter"/>
-        <local:EventArgsConverter x:Key="EventArgsConverter" />
+        <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
 
     <Grid Margin="10">
@@ -46,9 +46,11 @@
             <TextBox Text="{Binding SelectedProduct.LongDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Padding="5" Margin="0,0,0,5"/>
 
             <TextBlock Text="Фотография:" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,5,0,0"/>
+
             <Button Content="Выбрать фото" Command="{Binding SelectImageCommand}"
                     Width="120"
                     Margin="-250,-20,0,0"/>
+
             <Border BorderBrush="Gray"
                     CornerRadius="30" 
                     Width="500" 
@@ -58,9 +60,7 @@
                     Margin="0,10,0,0"
                     ClipToBounds="True"
                     AllowDrop="True"
-                    PreviewDragOver="Border_PreviewDragOver"
-                    
-                    >
+                    PreviewDragOver="Border_PreviewDragOver">
 
                 <i:Interaction.Triggers>
                     <i:EventTrigger EventName="Drop">
@@ -68,25 +68,25 @@
                     </i:EventTrigger>
                 </i:Interaction.Triggers>
 
-                <!--<i:Interaction.Triggers>
-                    <i:EventTrigger EventName="Drop">
-                        <i:InvokeCommandAction Command="{Binding ImageDropCommand}">
-                            <i:InvokeCommandAction.CommandParameter>
-                                <Binding Path="Data" Converter="{StaticResource EventArgsConverter}" />
-                            </i:InvokeCommandAction.CommandParameter>
-                        </i:InvokeCommandAction>
-                    </i:EventTrigger>
-                </i:Interaction.Triggers>-->
-
                 <Border.Clip >
                     <RectangleGeometry Rect="0,0,500,230" RadiusX="30" RadiusY="30"/>
                 </Border.Clip>
 
-                <Image Source="{Binding SelectedProduct.Img, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
+                <Grid>
+                    <TextBlock Text="Перетащите изображение сюда"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"
+                               FontSize="20"
+                               FontWeight="Medium"
+                               Foreground="Gray"
+                               Visibility="{Binding SelectedProduct.Img, Converter={StaticResource StringToVisibilityConverter}}"/>
+
+                    <Image Source="{Binding SelectedProduct.Img, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
                         HorizontalAlignment="Center"
                         Stretch="Fill"
                         Width="500"
                         Height="230"/>
+                </Grid>
             </Border>
         </StackPanel>
 

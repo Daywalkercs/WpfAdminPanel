@@ -18,12 +18,7 @@ namespace WpfAdminPanel.Helpers
             _canExecute = canExecute;
         }
 
-        //public bool CanExecute(object parameter)
-        //{
-        //    bool result = _canExecute == null || (parameter is T param && _canExecute(param));
-        //    Debug.WriteLine($"CanExecute({parameter}): {result}");
-        //    return result;
-        //}
+
 
         public bool CanExecute(object parameter)
         {

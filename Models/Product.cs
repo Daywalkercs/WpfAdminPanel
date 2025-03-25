@@ -9,13 +9,13 @@ using System.Threading.Tasks;
 
 namespace WpfAdminPanel.Models
 {
-    public class Product : INotifyPropertyChanged
+    public class Product //: INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
-        }
+        //public event PropertyChangedEventHandler PropertyChanged;
+        //protected void OnPropertyChanged([CallerMemberName] string name = null)
+        //{
+        //    PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        //}
 
         private int _id;
         public int Id
@@ -52,7 +52,7 @@ namespace WpfAdminPanel.Models
             set 
             {
                 _img = value;
-                OnPropertyChanged();
+                //OnPropertyChanged();
             }
         }
 
