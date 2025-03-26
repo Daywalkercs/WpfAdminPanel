@@ -6,18 +6,23 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.Windows.Data;
 using System.Windows.Media.Imaging;
+using System.Windows;
+using System.IO;
 
-namespace WpfAdminPanel.Converters  
+namespace WpfAdminPanel.Converters
 {
     public class ImagePathToBitmapConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is string imagePath && !string.IsNullOrEmpty(imagePath))
+            if (value is string imagePath && !string.IsNullOrWhiteSpace(imagePath))
             {
-                return new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                if (File.Exists(imagePath))
+                {
+                    return new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                }
             }
-            return null;
+            return DependencyProperty.UnsetValue; ;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

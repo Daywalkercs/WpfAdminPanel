@@ -39,6 +39,7 @@ namespace WpfAdminPanel.ViewModels
             {
                 _selectedProduct = value;
                 OnPropertyChanged(nameof(SelectedProduct));
+                OnPropertyChanged(nameof(SelectedProduct.Img));
             }
         }
 
@@ -120,7 +121,7 @@ namespace WpfAdminPanel.ViewModels
                         //Available = true,
                         //CategoryID = 1,
                         Id = 1,
-                        Img = "Image BMW",
+                        Img = "",
                         //IsFavourite = true,
                         LongDescription = "Long description BMW",
                         Price = 200,
@@ -131,7 +132,7 @@ namespace WpfAdminPanel.ViewModels
                         //Available = true,
                         //CategoryID = 1,
                         Id = 2,
-                        Img = "Image Mazda",
+                        Img = "",
                         //IsFavourite = true,
                         LongDescription = "Long description Mazda",
                         Price = 100,
@@ -142,7 +143,7 @@ namespace WpfAdminPanel.ViewModels
                         //Available = true,
                         //CategoryID = 1,
                         Id = 3,
-                        Img = "Image Toyota",
+                        Img = "",
                         //IsFavourite = true,
                         LongDescription = "Long description Toyota",
                         Price = 100,

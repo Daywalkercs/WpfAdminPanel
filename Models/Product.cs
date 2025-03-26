@@ -52,7 +52,7 @@ namespace WpfAdminPanel.Models
             set 
             {
                 _img = value;
-                //OnPropertyChanged();
+                //OnPropertyChanged(nameof(Img));
             }
         }
 

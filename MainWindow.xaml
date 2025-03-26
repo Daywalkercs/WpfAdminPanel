@@ -79,13 +79,17 @@
                                FontSize="20"
                                FontWeight="Medium"
                                Foreground="Gray"
-                               Visibility="{Binding SelectedProduct.Img, Converter={StaticResource StringToVisibilityConverter}}"/>
+                               Visibility="{Binding SelectedProduct.Img, 
+                                                    Converter={StaticResource StringToVisibilityConverter}}"/>
 
                     <Image Source="{Binding SelectedProduct.Img, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
-                        HorizontalAlignment="Center"
-                        Stretch="Fill"
-                        Width="500"
-                        Height="230"/>
+                           HorizontalAlignment="Center"
+                           Stretch="Fill"
+                           Width="500"
+                           Height="230"
+                           Visibility="{Binding SelectedProduct.Img, 
+                                                 Converter={StaticResource StringToVisibilityConverter}, 
+                                                 ConverterParameter=Invert}"/>
                 </Grid>
             </Border>
         </StackPanel>

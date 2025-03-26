@@ -13,7 +13,10 @@ namespace WpfAdminPanel.Converters
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return string.IsNullOrEmpty(value as string) ? Visibility.Visible : Visibility.Collapsed;
+            bool invert = parameter as string == "Invert";
+            bool isEmpty = string.IsNullOrWhiteSpace(value as string);
+
+            return (invert ? !isEmpty : isEmpty) ? Visibility.Visible : Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
