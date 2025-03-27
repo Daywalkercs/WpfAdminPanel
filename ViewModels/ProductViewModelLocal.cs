@@ -24,15 +24,13 @@ namespace WpfAdminPanel.ViewModels
 
         public ICommand LoadCommand { get; }
         public ICommand AddCommand { get; }
-        //public ICommand NewProductCommand { get; }
-        public ICommand UpdateCommand { get; }
         public ICommand DeleteCommand { get; }
         public ICommand SelectImageCommand { get; }
         public ICommand ImageDropCommand { get; }
 
         private const string COMBO_BOX_TEXT = "Выберите товар или начните вводить";
 
-        public Product product = new Product();
+        //public Product product = new Product();
 
         private string _comboBoxText = "Выберите товар или начните вводить";
         public string ComboBoxText
@@ -45,7 +43,7 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private ObservableCollection<Product> _products;
+        private ObservableCollection<Product> _products = new ();
         public ObservableCollection<Product> Products
         {
             get { return _products; }
@@ -58,8 +56,8 @@ namespace WpfAdminPanel.ViewModels
 
 
 
-        private Product _selectedProduct;
-        public Product SelectedProduct
+        private Product? _selectedProduct;
+        public Product? SelectedProduct
         {
             get => _selectedProduct;
             set
@@ -70,59 +68,55 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
+        //public string CarModel
+        //{
+        //    get => product.CarModel;
+        //    set
+        //    {
+        //        product.CarModel = value;
+        //        OnPropertyChanged(nameof(CarModel));
+        //    }
+        //}
 
+        //public string ShortDescription
+        //{
+        //    get => product.ShortDescription;
+        //    set
+        //    {
+        //        product.ShortDescription = value;
+        //        OnPropertyChanged(nameof(ShortDescription));
+        //    }
+        //}
 
+        //public string LongDescription
+        //{
+        //    get => product.LongDescription;
+        //    set
+        //    {
+        //        product.LongDescription = value;
+        //        OnPropertyChanged(nameof(LongDescription));
+        //    }
+        //}
 
+        //public string Img
+        //{
+        //    get => product.Img;
+        //    set
+        //    {
+        //        product.Img = value;
+        //        OnPropertyChanged(nameof(Img));
+        //    }
+        //}
 
-        public string CarModel
-        {
-            get => product.CarModel;
-            set
-            {
-                product.CarModel = value;
-                OnPropertyChanged(nameof(CarModel));
-            }
-        }
-
-        public string ShortDescription
-        {
-            get => product.ShortDescription;
-            set
-            {
-                product.ShortDescription = value;
-                OnPropertyChanged(nameof(ShortDescription));
-            }
-        }
-
-        public string LongDescription
-        {
-            get => product.LongDescription;
-            set
-            {
-                product.LongDescription = value;
-                OnPropertyChanged(nameof(LongDescription));
-            }
-        }
-
-        public string Img
-        {
-            get => product.Img;
-            set
-            {
-                product.Img = value;
-                OnPropertyChanged(nameof(Img));
-            }
-        }
-
-        public decimal Price
-        {
-            get => product.Price;
-            set
-            {
-                product.Price = value;
-                OnPropertyChanged(nameof(Price));
-            }
-        }
+        //public decimal Price
+        //{
+        //    get => product.Price;
+        //    set
+        //    {
+        //        product.Price = value;
+        //        OnPropertyChanged(nameof(Price));
+        //    }
+        //}
 
 
 
@@ -167,12 +161,9 @@ namespace WpfAdminPanel.ViewModels
                 };
 
             LoadCommand = new RelayCommand<object>(_ => LoadProducts());
-            //NewProductCommand = new RelayCommand<object>(_ => NewProduct());
             AddCommand = new RelayCommand<object>(_ => AddProduct());
-            //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
-            //ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped, _ => true);
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
             LoadProducts();
         }
@@ -228,7 +219,7 @@ namespace WpfAdminPanel.ViewModels
 
             if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {
-                MessageBox.Show("Заполните поля");
+                MessageBox.Show("Поле \"Модель\" обязательно для заполнения!");
                 return;
             }
 
@@ -248,11 +239,12 @@ namespace WpfAdminPanel.ViewModels
 
             try
             {
-                await Task.Delay(1000);
+                await Task.Delay(100);
                 Products.Remove(SelectedProduct);
 
                 SelectedProduct = null;
-                OnPropertyChanged(nameof (SelectedProduct));
+                OnPropertyChanged(nameof(SelectedProduct));
+                LoadProducts();
                 MessageBox.Show("Товар успешно удален.");
             }
             catch (Exception ex)
