@@ -16,7 +16,34 @@ namespace WpfAdminPanel.ViewModels
 {
     public class ProductViewModelLocal : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+        private void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public ICommand LoadCommand { get; }
+        public ICommand AddCommand { get; }
+        //public ICommand NewProductCommand { get; }
+        public ICommand UpdateCommand { get; }
+        public ICommand DeleteCommand { get; }
+        public ICommand SelectImageCommand { get; }
+        public ICommand ImageDropCommand { get; }
+
+        private const string COMBO_BOX_TEXT = "Выберите товар или начните вводить";
+
         public Product product = new Product();
+
+        private string _comboBoxText = "Выберите товар или начните вводить";
+        public string ComboBoxText
+        {
+            get => _comboBoxText;
+            set
+            {
+                _comboBoxText = value;
+                OnPropertyChanged(nameof(ComboBoxText));
+            }
+        }
 
         private ObservableCollection<Product> _products;
         public ObservableCollection<Product> Products
@@ -43,20 +70,8 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        public ICommand LoadCommand { get; }
-        public ICommand AddCommand { get; }
-        public ICommand NewProductCommand { get; }
-        public ICommand UpdateCommand { get; }
-        public ICommand DeleteCommand { get; }
-        public ICommand SelectImageCommand { get; }
-        public ICommand ImageDropCommand { get; }
 
 
-        public event PropertyChangedEventHandler? PropertyChanged;
-        private void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
 
 
         public string CarModel
@@ -152,7 +167,7 @@ namespace WpfAdminPanel.ViewModels
                 };
 
             LoadCommand = new RelayCommand<object>(_ => LoadProducts());
-            NewProductCommand = new RelayCommand<object>(_ => NewProduct());
+            //NewProductCommand = new RelayCommand<object>(_ => NewProduct());
             AddCommand = new RelayCommand<object>(_ => AddProduct());
             //UpdateCommand = new RelayCommand(async () => await UpdateProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
@@ -160,6 +175,15 @@ namespace WpfAdminPanel.ViewModels
             //ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped, _ => true);
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
             LoadProducts();
+        }
+
+        private void LoadProducts()
+        {
+            ComboBoxText = COMBO_BOX_TEXT;
+            SelectedProduct = null;
+            OnPropertyChanged(nameof(SelectedProduct));
+            SelectedProduct = new Product();
+            OnPropertyChanged(nameof(Products));
         }
 
         private void OnImageDropped(DragEventArgs e)
@@ -197,23 +221,11 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private void LoadProducts()
-        {
-            OnPropertyChanged(nameof(Products));
-            SelectedProduct = new Product();
-        }
-
-
-
-        private void NewProduct()
-        {
-            SelectedProduct = new Product();
-            OnPropertyChanged(nameof(SelectedProduct));
-
-        }
 
         private async Task AddProduct()
         {
+            await Task.Delay(100);
+
             if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {
                 MessageBox.Show("Заполните поля");
