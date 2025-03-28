@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using WpfAdminPanel.ViewModels;
+using System.Reflection;
 
 namespace WpfAdminPanel
 {
@@ -10,6 +11,7 @@ namespace WpfAdminPanel
             InitializeComponent();
             //DataContext = new ProductViewModel();
             DataContext = new ProductViewModelLocal();
+            SetWindowTitle();
         }
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
@@ -18,6 +20,10 @@ namespace WpfAdminPanel
             e.Effects = DragDropEffects.Copy;
         }
 
-
+        private void SetWindowTitle()
+        {
+            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.Title = $"Админ-панель v{version}";
+        }
     }
 }

@@ -3,17 +3,18 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         xmlns:local="clr-namespace:WpfAdminPanel.Converters" 
-        Title="Админ-панель" Height="610" Width="600">
+        Height="600" 
+        Width="600">
 
     <Window.Resources>
         <local:ImagePathToBitmapConverter x:Key="ImagePathConverter"/>
         <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
     </Window.Resources>
 
-
-
-    <Grid Margin="10">
+    <Grid Margin="0">
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -21,8 +22,18 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ComboBox Grid.Row="0"
-                  Margin="0,5,0,0"
+        
+            <ToolBar Grid.Row="0" VerticalAlignment="Top">
+                <Button Content="Новый товар" Command="{Binding LoadCommand}" Width="100" Margin="5"/>
+                <Button Content="Добавить" Command="{Binding AddCommand}" Width="100" Margin="5"/>
+                <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="100" Margin="5"/>
+                <Button Content="Выбрать фото" Command="{Binding SelectImageCommand}" Width="100" Margin="5"/>
+            <Button Content="Стрелка" Width="100" Margin="5"/>
+            </ToolBar>
+        
+
+        <ComboBox Grid.Row="1"
+                  Margin="10,5,10,0"
                   IsEditable="True"
                   Text="{Binding ComboBoxText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -30,53 +41,51 @@
                   DisplayMemberPath="CarModel"/>
 
         <!-- Поля ввода -->
-        <StackPanel Grid.Row="1" Grid.Column="0" Margin="0,5,0,0">
-            <TextBlock Text="Модель:" Margin="0,0,0,2" Width="290" HorizontalAlignment="Left" FontWeight="Bold"/>
+        <StackPanel Grid.Row="2" Grid.Column="0" Margin="10,5,10,0">
+            <TextBlock Text="Модель:" Margin="0,0,0,2" Width="280" HorizontalAlignment="Left" FontWeight="Bold"/>
             <TextBox Text="{Binding SelectedProduct.CarModel, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Padding="5" 
                      Margin="0,0,0,0" 
-                     Width="290"
+                     Width="280"
                      HorizontalAlignment="Left"/>
         </StackPanel>
-        <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,5,0,0">
-            <TextBlock Text="Цена:" Margin="0,0,0,2" Width="290" HorizontalAlignment="Right" FontWeight="Bold"/>
+        <StackPanel Grid.Row="2" Grid.Column="1" Margin="10,5,10,0">
+            <TextBlock Text="Цена:" Margin="0,0,0,2" Width="280" HorizontalAlignment="Right" FontWeight="Bold"/>
             <TextBox Text="{Binding SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Padding="5" 
                      Margin="0,0,0,0" 
-                     Width="290" 
+                     Width="280" 
                      HorizontalAlignment="Right"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="0" Margin="0,5,0,0">
-            <TextBlock Text="Краткое описание:" Margin="0,0,0,2" Width="290" FontWeight="Bold" HorizontalAlignment="Left"/>
+        <StackPanel Grid.Row="3" Grid.Column="0" Margin="10,5,10,0">
+            <TextBlock Text="Краткое описание:" Margin="0,0,0,2" Width="280" FontWeight="Bold" HorizontalAlignment="Left"/>
             <TextBox Text="{Binding SelectedProduct.ShortDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Padding="5" 
                      Margin="0,0,0,0" 
-                     Width="290" 
+                     Width="280" 
                      Height="150"
                      HorizontalAlignment="Left" 
-                     TextWrapping="Wrap"/>
+                     TextWrapping="Wrap" 
+                     VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
 
-        <StackPanel Grid.Row="2" Grid.Column="1" Margin="0,5,0,0">
-            <TextBlock Text="Полное описание:" Margin="0,0,0,2" Width="290" FontWeight="Bold" HorizontalAlignment="Right"/>
+        <StackPanel Grid.Row="3" Grid.Column="1" Margin="10,5,10,0">
+            <TextBlock Text="Полное описание:" Margin="0,0,0,2" Width="280" FontWeight="Bold" HorizontalAlignment="Right"/>
             <TextBox Text="{Binding SelectedProduct.LongDescription, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Padding="5" 
                      Margin="0,0,0,0" 
-                     Width="290" 
+                     Width="280" 
                      Height="150" 
                      HorizontalAlignment="Right" 
-                     TextWrapping="Wrap"/>
+                     TextWrapping="Wrap" 
+                     VerticalScrollBarVisibility="Auto"/>
         </StackPanel>
 
 
 
-        <StackPanel Grid.Row="3">
-            <TextBlock Text="Фотография:" FontWeight="Bold" HorizontalAlignment="Left" Margin="0,5,0,0"/>
-
-            <Button Content="Выбрать фото" Command="{Binding SelectImageCommand}"
-                    Width="120"
-                    Margin="-250,-20,0,0"/>
+        <StackPanel Grid.Row="4">
+            <TextBlock Text="Фотография:" FontWeight="Bold" HorizontalAlignment="Left" Margin="10,5,10,0"/>
 
             <Border BorderBrush="Gray"
                     CornerRadius="30" 
@@ -118,15 +127,17 @@
                                                  Converter={StaticResource StringToVisibilityConverter}, 
                                                  ConverterParameter=Invert}"/>
                 </Grid>
-
             </Border>
         </StackPanel>
 
         <!-- Кнопки -->
-        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
             <Button Content="Новый товар" Command="{Binding LoadCommand}" Width="120" Margin="5"/>
             <Button Content="Добавить" Command="{Binding AddCommand}" Width="120" Margin="5"/>
             <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="120" Margin="5"/>
+            <Button Content="Выбрать фото" Command="{Binding SelectImageCommand}"
+        Width="120"
+        Margin="5"/>
         </StackPanel>
     </Grid>
 
