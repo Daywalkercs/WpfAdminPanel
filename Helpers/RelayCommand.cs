@@ -7,12 +7,12 @@ namespace WpfAdminPanel.Helpers
     public class RelayCommand<T> : ICommand
     {
         private readonly Action<T> _execute;
-        private readonly Func<T, bool> _canExecute;
+        private readonly Func<T, bool>? _canExecute;
         //private readonly Predicate<T> _canExecute;
 
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler? CanExecuteChanged;
 
-        public RelayCommand(Action<T> execute, Func<T, bool> canExecute = null)
+        public RelayCommand(Action<T> execute, Func<T, bool>? canExecute = null)
         {
             _execute = execute ?? throw new ArgumentNullException(nameof(execute));
             _canExecute = canExecute;
@@ -20,7 +20,7 @@ namespace WpfAdminPanel.Helpers
 
 
 
-        public bool CanExecute(object parameter)
+        public bool CanExecute(object? parameter)
         {
             bool result;
 
@@ -34,29 +34,35 @@ namespace WpfAdminPanel.Helpers
             }
             else
             {
-                result = _canExecute(default); // Передаём `default(T)`, если параметр `null`
+                if (default(T) != null || typeof(T).IsClass)
+                {
+                    result = _canExecute(default!);
+                }
+                else
+                {
+                    result = false; // Если T - значимый тип, `null` недопустим, команда недоступна
+                }
             }
-
-            Debug.WriteLine($"CanExecute({parameter}): {result}");
             return result;
         }
 
 
-        public void Execute(object parameter) 
+        public void Execute(object? parameter) 
         {
-            Debug.WriteLine($"Execute called with parameter: {parameter?.GetType().FullName ?? "null"}");
-
             if (parameter is T param)
             {
-                Debug.WriteLine($"Executing command with parameter: {param}");
                 _execute(param);
             }
             else
             {
-
-                Debug.WriteLine($"Executing command without parameter");
-                Debug.WriteLine(parameter);
-                _execute(default(T));
+                if (default(T) is null || typeof(T).IsClass)
+                {
+                    _execute(default!); // `default!` подавляет предупреждение
+                }
+                else
+                {
+                    throw new InvalidOperationException($"Команда ожидает параметр типа {typeof(T)}, но получила null.");
+                }
             }
         }
         

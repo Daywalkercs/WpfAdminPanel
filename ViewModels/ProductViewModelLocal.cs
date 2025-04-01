@@ -11,6 +11,10 @@ using WpfAdminPanel.Models;
 using System.ComponentModel;
 using Microsoft.Win32;
 using System.Windows.Media.Imaging;
+using System.IO;
+using System.Text.Json;
+using System.Windows.Diagnostics;
+//using static System.Net.WebRequestMethods;
 
 namespace WpfAdminPanel.ViewModels
 {
@@ -28,9 +32,13 @@ namespace WpfAdminPanel.ViewModels
         public ICommand SelectImageCommand { get; }
         public ICommand ImageDropCommand { get; }
 
+        public ICommand OpenCommand { get; }
+        public ICommand SaveCommand { get; }
+        public ICommand SaveAsCommand { get; }
+
         private const string COMBO_BOX_TEXT = "Выберите товар или начните вводить";
 
-        //public Product product = new Product();
+        private string? _currentFilePath;
 
         private string _comboBoxText = "Выберите товар или начните вводить";
         public string ComboBoxText
@@ -43,7 +51,7 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private ObservableCollection<Product> _products = new ();
+        private ObservableCollection<Product> _products = new();
         public ObservableCollection<Product> Products
         {
             get { return _products; }
@@ -53,8 +61,6 @@ namespace WpfAdminPanel.ViewModels
                 OnPropertyChanged(nameof(Products));
             }
         }
-
-
 
         private Product? _selectedProduct;
         public Product? SelectedProduct
@@ -67,59 +73,6 @@ namespace WpfAdminPanel.ViewModels
                 OnPropertyChanged(nameof(SelectedProduct.Img));
             }
         }
-
-        //public string CarModel
-        //{
-        //    get => product.CarModel;
-        //    set
-        //    {
-        //        product.CarModel = value;
-        //        OnPropertyChanged(nameof(CarModel));
-        //    }
-        //}
-
-        //public string ShortDescription
-        //{
-        //    get => product.ShortDescription;
-        //    set
-        //    {
-        //        product.ShortDescription = value;
-        //        OnPropertyChanged(nameof(ShortDescription));
-        //    }
-        //}
-
-        //public string LongDescription
-        //{
-        //    get => product.LongDescription;
-        //    set
-        //    {
-        //        product.LongDescription = value;
-        //        OnPropertyChanged(nameof(LongDescription));
-        //    }
-        //}
-
-        //public string Img
-        //{
-        //    get => product.Img;
-        //    set
-        //    {
-        //        product.Img = value;
-        //        OnPropertyChanged(nameof(Img));
-        //    }
-        //}
-
-        //public decimal Price
-        //{
-        //    get => product.Price;
-        //    set
-        //    {
-        //        product.Price = value;
-        //        OnPropertyChanged(nameof(Price));
-        //    }
-        //}
-
-
-
 
         public ProductViewModelLocal()
         {
@@ -165,7 +118,94 @@ namespace WpfAdminPanel.ViewModels
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
+
+            OpenCommand = new RelayCommand<object>(_ => OpenFile());
+            SaveCommand = new RelayCommand<object>(_ => Save());
+            SaveAsCommand = new RelayCommand<object>(_ => SaveAsFile());
             LoadProducts();
+        }
+
+        private void Save()
+        {
+            string directory = "Data";
+            string filePath = Path.Combine(directory, "SavedFile.json");
+
+            if (!Directory.Exists(directory))
+            {
+                Directory.CreateDirectory(directory);
+            }
+
+            string json = JsonSerializer.Serialize(Products, new JsonSerializerOptions { WriteIndented = true });
+            File.WriteAllText(filePath, json);
+            _currentFilePath = filePath;
+            MessageBox.Show("Файл сохранен", "Сохранение файла");
+        }
+
+        private void SaveAsFile()
+        {
+            var dialog = new SaveFileDialog
+            {
+                Filter = "JSON файлы (*.json)|*.json|Все файлы (*.*)|*.*",
+                Title = "Сохранить как"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                _currentFilePath = dialog.FileName;
+                SaveToFile(_currentFilePath);
+            }
+        }
+
+        private void SaveToFile(string failPath)
+        {
+
+            try
+            {
+                string json = JsonSerializer.Serialize(Products, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(failPath, json);
+                MessageBox.Show("Файл сохранен.", "Успешное сохранение");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка при сохранении {ex.Message}", "Ошибка сохранения");
+            }
+        }
+
+        private void OpenFile()
+        {
+            var openDialog = new OpenFileDialog
+            {
+                Filter = "Json файлы (*.json)|*.json|Все файлы (*.*) | *.*",
+                Title = "Открыть файл"
+            };
+
+            if (openDialog.ShowDialog() == true)
+            {
+                LoadFromFile(openDialog.FileName);
+            }
+        }
+
+        private void LoadFromFile(string filePath)
+        {
+            try
+            {
+                string json = File.ReadAllText(filePath);
+                var products = JsonSerializer.Deserialize<ObservableCollection<Product>>(json);
+
+                if (products != null)
+                {
+                    Products.Clear();
+                    foreach (var product in products)
+                    {
+                        Products.Add(product);
+                    }
+                    MessageBox.Show("Файл успешно загружен", "Успешная загрузка");
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Ошибка загрузки: {ex.Message}", "Ошибка загрузки файла!");
+            }
         }
 
         private void LoadProducts()
@@ -213,9 +253,9 @@ namespace WpfAdminPanel.ViewModels
         }
 
 
-        private async Task AddProduct()
+        private void AddProduct()
         {
-            await Task.Delay(100);
+            //await Task.Delay(100);
 
             if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {

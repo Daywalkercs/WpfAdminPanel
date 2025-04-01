@@ -11,6 +11,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\open.ico" />
+    <None Remove="Icons\save.ico" />
+    <None Remove="Icons\save_as.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Icons\admin_person.ico" />
   </ItemGroup>
 
@@ -21,6 +27,18 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" Version="1.1.135" />
     <PackageReference Include="System.Windows.Interactivity.WPF" Version="2.0.20525" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Icons\open.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\save.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+    <Resource Include="Icons\save_as.ico">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
 
 </Project>
