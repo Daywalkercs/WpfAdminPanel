@@ -14,6 +14,10 @@
     <None Remove="Icons\open.ico" />
     <None Remove="Icons\save.ico" />
     <None Remove="Icons\save_as.ico" />
+    <None Remove="Img\Background.jpg" />
+    <None Remove="Img\Background3.webp" />
+    <None Remove="Img\Background6.jpg" />
+    <None Remove="Img\ml_background.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,6 +43,7 @@
     <Resource Include="Icons\save_as.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
+    <Resource Include="Img\Background.jpg" />
   </ItemGroup>
 
 </Project>

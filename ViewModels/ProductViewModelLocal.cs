@@ -76,45 +76,8 @@ namespace WpfAdminPanel.ViewModels
 
         public ProductViewModelLocal()
         {
-            Products = new ObservableCollection<Product>
-                {
-                    new Product {
-                        CarModel = "BMW",
-                        //Available = true,
-                        //CategoryID = 1,
-                        Id = 1,
-                        Img = "",
-                        //IsFavourite = true,
-                        LongDescription = "Long description BMW",
-                        Price = 200,
-                        ShortDescription = "Short description BMW"
-                    },
-                    new Product {
-                        CarModel = "Mazda",
-                        //Available = true,
-                        //CategoryID = 1,
-                        Id = 2,
-                        Img = "",
-                        //IsFavourite = true,
-                        LongDescription = "Long description Mazda",
-                        Price = 100,
-                        ShortDescription = "Short description Mazda"
-                    },
-                        new Product {
-                        CarModel = "Toyota",
-                        //Available = true,
-                        //CategoryID = 1,
-                        Id = 3,
-                        Img = "",
-                        //IsFavourite = true,
-                        LongDescription = "Long description Toyota",
-                        Price = 100,
-                        ShortDescription = "Short description Toyota"
-                    }
-                };
-
-            LoadCommand = new RelayCommand<object>(_ => LoadProducts());
-            AddCommand = new RelayCommand<object>(_ => AddProduct());
+            LoadCommand = new RelayCommand<object>( async _ => await LoadProductsAsync());
+            AddCommand = new RelayCommand<object>(async _ => await AddProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
@@ -122,7 +85,7 @@ namespace WpfAdminPanel.ViewModels
             OpenCommand = new RelayCommand<object>(_ => OpenFile());
             SaveCommand = new RelayCommand<object>(_ => Save());
             SaveAsCommand = new RelayCommand<object>(_ => SaveAsFile());
-            LoadProducts();
+            _ = LoadProductsAsync();
         }
 
         private void Save()
@@ -158,7 +121,6 @@ namespace WpfAdminPanel.ViewModels
 
         private void SaveToFile(string failPath)
         {
-
             try
             {
                 string json = JsonSerializer.Serialize(Products, new JsonSerializerOptions { WriteIndented = true });
@@ -208,8 +170,9 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private void LoadProducts()
+        private async Task LoadProductsAsync()
         {
+            await Task.Delay(20000);
             ComboBoxText = COMBO_BOX_TEXT;
             SelectedProduct = null;
             OnPropertyChanged(nameof(SelectedProduct));
@@ -253,9 +216,9 @@ namespace WpfAdminPanel.ViewModels
         }
 
 
-        private void AddProduct()
+        private async Task AddProduct()
         {
-            //await Task.Delay(100);
+            await Task.Delay(100);
 
             if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {
@@ -266,7 +229,7 @@ namespace WpfAdminPanel.ViewModels
             SelectedProduct.Id = Products.Count + 1;
             Products.Add(SelectedProduct);
             MessageBox.Show("Товар добавлен");
-            LoadProducts();
+            await LoadProductsAsync();
         }
 
 
@@ -284,7 +247,7 @@ namespace WpfAdminPanel.ViewModels
 
                 SelectedProduct = null;
                 OnPropertyChanged(nameof(SelectedProduct));
-                LoadProducts();
+                _ = LoadProductsAsync();
                 MessageBox.Show("Товар успешно удален.");
             }
             catch (Exception ex)
