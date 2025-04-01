@@ -22,8 +22,8 @@ namespace WpfAdminPanel
 
         private void SetWindowTitle()
         {
-            string version = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            this.Title = $"Админ-панель v{version}";
+            string? version = Assembly.GetExecutingAssembly().GetName().Version?.ToString();
+            this.Title = $"Админ-панель v{version ?? "Неизвестная версия"}";
         }
     }
 }
