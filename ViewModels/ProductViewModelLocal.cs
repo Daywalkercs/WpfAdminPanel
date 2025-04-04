@@ -85,6 +85,7 @@ namespace WpfAdminPanel.ViewModels
             OpenCommand = new RelayCommand<object>(_ => OpenFile());
             SaveCommand = new RelayCommand<object>(_ => Save());
             SaveAsCommand = new RelayCommand<object>(_ => SaveAsFile());
+            
             _ = LoadProductsAsync();
         }
 
@@ -119,12 +120,12 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private void SaveToFile(string failPath)
+        private void SaveToFile(string filePath)
         {
             try
             {
                 string json = JsonSerializer.Serialize(Products, new JsonSerializerOptions { WriteIndented = true });
-                File.WriteAllText(failPath, json);
+                File.WriteAllText(filePath, json);
                 MessageBox.Show("Файл сохранен.", "Успешное сохранение");
             }
             catch (Exception ex)
@@ -172,7 +173,7 @@ namespace WpfAdminPanel.ViewModels
 
         private async Task LoadProductsAsync()
         {
-            await Task.Delay(20000);
+            await Task.Delay(1000);
             ComboBoxText = COMBO_BOX_TEXT;
             SelectedProduct = null;
             OnPropertyChanged(nameof(SelectedProduct));
@@ -215,7 +216,6 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-
         private async Task AddProduct()
         {
             await Task.Delay(100);
@@ -228,6 +228,7 @@ namespace WpfAdminPanel.ViewModels
 
             SelectedProduct.Id = Products.Count + 1;
             Products.Add(SelectedProduct);
+            OnPropertyChanged(nameof(Products));
             MessageBox.Show("Товар добавлен");
             await LoadProductsAsync();
         }
@@ -247,6 +248,7 @@ namespace WpfAdminPanel.ViewModels
 
                 SelectedProduct = null;
                 OnPropertyChanged(nameof(SelectedProduct));
+                OnPropertyChanged(nameof(Products));
                 _ = LoadProductsAsync();
                 MessageBox.Show("Товар успешно удален.");
             }

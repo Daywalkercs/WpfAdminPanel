@@ -11,8 +11,10 @@
     </Window.Background>
 
     <Window.Resources>
+        <local:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
         <local:ImagePathToBitmapConverter x:Key="ImagePathConverter"/>
         <local:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+
     </Window.Resources>
 
     <Grid Margin="0">
@@ -64,8 +66,8 @@
 
         </ToolBar>
 
-        <ComboBox Grid.Row="1"
-                  Margin="10,5,10,0"
+        <ComboBox Grid.Row="1" Style="{StaticResource CustomComboBoxStyle}"
+                  Margin="5,5,5,0" 
                   IsEditable="True"
                   Text="{Binding ComboBoxText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -82,7 +84,7 @@
                      HorizontalAlignment="Left" Background="WhiteSmoke"/>
         </StackPanel>
         <StackPanel Grid.Row="2" Grid.Column="1" Margin="10,5,10,0">
-            <TextBlock Text="Цена:" Margin="0,0,0,2" Width="280" HorizontalAlignment="Right" FontWeight="Bold" Foreground="AntiqueWhite"/>
+            <TextBlock Text="Цена:" Margin="0,0,0,2" Width="280" HorizontalAlignment="Right" FontWeight="Bold" Foreground="WhiteSmoke"/>
             <TextBox Text="{Binding SelectedProduct.Price, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
                      Padding="5" 
                      Margin="0,0,0,0" 
@@ -162,14 +164,8 @@
             </Border>
         </StackPanel>
 
-        <!-- Кнопки -->
-        <!--<StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" Margin="5">
-            <Button Content="Новый товар" Command="{Binding LoadCommand}" Width="120" Margin="5"/>
-            <Button Content="Добавить" Command="{Binding AddCommand}" Width="120" Margin="5"/>
-            <Button Content="Удалить" Command="{Binding DeleteCommand}" Width="120" Margin="5"/>
-            <Button Content="Выбрать фото" Command="{Binding SelectImageCommand}"
-        Width="120"
-        Margin="5"/>
-        </StackPanel>-->
+
+
+
     </Grid>
 </Window>

@@ -1,0 +1,99 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:converters="clr-namespace:WpfAdminPanel.Converters">
+
+    <!-- Подключаем конвертер -->
+    <converters:StringToVisibilityConverter x:Key="StringToVisibilityConverter"/>
+    <converters:ZeroToVisibilityConverter x:Key="ZeroToVisibilityConverter"/>
+
+    <Style x:Key="CustomComboBoxStyle" TargetType="ComboBox">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="ComboBox">
+                    <Border Background="PeachPuff" 
+                            BorderBrush="Orange" 
+                            BorderThickness="1" 
+                            CornerRadius="8">
+                        <Grid>
+                            <!-- Контейнер для текста -->
+                            <Grid>
+                                <!-- Поле ввода (TextBox) -->
+                                <TextBox x:Name="PART_EditableTextBox"
+                                         Text="{Binding ComboBoxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                         Background="Transparent"
+                                         BorderThickness="0"
+                                         VerticalContentAlignment="Center"
+                                         Visibility="{Binding ComboBoxText, Converter={StaticResource StringToVisibilityConverter}, ConverterParameter=Invert}"/>
+
+                                <!-- Отображение выбранного элемента -->
+                                <ContentPresenter x:Name="ContentPresenter"
+                                                  Content="{TemplateBinding SelectionBoxItem}"
+                                                  VerticalAlignment="Center"
+                                                  Margin="5"
+                                                  Visibility="{Binding ComboBoxText, Converter={StaticResource StringToVisibilityConverter}}"/>
+                            </Grid>
+
+                            <!-- Кнопка-стрелка -->
+
+                            <ToggleButton x:Name="ToggleButton"
+                                          HorizontalAlignment="Right"
+                                          Grid.Column="1"
+                                          Width="100"
+                                          Height="30"
+                                          Background="WhiteSmoke"
+                                          BorderBrush="PeachPuff"
+                                          BorderThickness="0"
+                                          IsChecked="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay}">
+                                <ToggleButton.Template>
+                                    <ControlTemplate TargetType="ToggleButton">
+                                        <Border x:Name="Border"
+                                                Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="8"
+                                                Width="100"
+                                                Height="30"
+                                                Padding="5">
+                                            <ContentPresenter Content="▼" HorizontalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </ToggleButton.Template>
+                            </ToggleButton>
+
+
+                            <!-- Выпадающий список -->
+                            <Popup x:Name="Popup"
+                                   IsOpen="{TemplateBinding IsDropDownOpen}"
+                                   Placement="Bottom"
+                                   Width="{TemplateBinding ActualWidth}"
+                                   AllowsTransparency="true"
+                                   PopupAnimation="Fade">
+                                <Border Background="WhiteSmoke"
+                                        BorderBrush="PeachPuff"
+                                        BorderThickness="1"
+                                        CornerRadius="8"
+                                        Padding="5">
+                                    <Grid>
+                                        <!-- Надпись, если список пуст -->
+                                        <TextBlock Text="Список товаров пуст"
+                                                   Foreground="Gray"
+                                                   FontStyle="Italic"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"
+                                                   Visibility="{Binding Products.Count, Converter={StaticResource ZeroToVisibilityConverter}}"/>
+
+                                        <!-- Сам список, если есть элементы -->
+                                        <ScrollViewer Visibility="{Binding Products.Count, Converter={StaticResource ZeroToVisibilityConverter}, ConverterParameter=Invert}">
+                                            <ItemsPresenter/>
+                                        </ScrollViewer>
+                                    </Grid>
+                                </Border>
+                            </Popup>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>
