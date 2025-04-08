@@ -29,6 +29,7 @@ namespace WpfAdminPanel.ViewModels
         public ICommand LoadCommand { get; }
         public ICommand AddCommand { get; }
         public ICommand DeleteCommand { get; }
+        public ICommand CleanAllCommand { get; }
         public ICommand SelectImageCommand { get; }
         public ICommand ImageDropCommand { get; }
 
@@ -80,13 +81,15 @@ namespace WpfAdminPanel.ViewModels
             AddCommand = new RelayCommand<object>(async _ => await AddProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
+            CleanAllCommand = new RelayCommand<object>(async _ => await CleanAll());
             ImageDropCommand = new RelayCommand<DragEventArgs>(OnImageDropped);
 
             OpenCommand = new RelayCommand<object>(_ => OpenFile());
             SaveCommand = new RelayCommand<object>(_ => Save());
             SaveAsCommand = new RelayCommand<object>(_ => SaveAsFile());
+
             
-            _ = LoadProductsAsync();
+            //_ = LoadProductsAsync();
         }
 
         private void Save()
@@ -171,7 +174,7 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private async Task LoadProductsAsync()
+        public async Task LoadProductsAsync()
         {
             await Task.Delay(1000);
             ComboBoxText = COMBO_BOX_TEXT;
@@ -255,6 +258,30 @@ namespace WpfAdminPanel.ViewModels
             catch (Exception ex)
             {
                 MessageBox.Show($"Ошибка удаления! {ex.Message}");
+            }
+        }
+
+        private async Task CleanAll()
+        {
+            try
+            {
+                if (Products.Count == 0)
+                {
+                    MessageBox.Show("Список товаров пуст", "Список товаров");
+                    return;
+                }
+
+                MessageBoxResult result = MessageBox.Show("Удалить все товары?", "Подтверждение удаления", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                if (result == MessageBoxResult.No) return;
+
+                // Очистка коллекции из UI потока!
+                await Application.Current.Dispatcher.InvokeAsync(() => Products.Clear());
+                
+                MessageBox.Show("Все товары удалены", "Удаление товаров");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Ошибка удаления");
             }
         }
     }

@@ -11,13 +11,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Icons\hide_icon.ico" />
     <None Remove="Icons\open.ico" />
     <None Remove="Icons\save.ico" />
     <None Remove="Icons\save_as.ico" />
-    <None Remove="Img\Background.jpg" />
-    <None Remove="Img\Background3.webp" />
-    <None Remove="Img\Background6.jpg" />
-    <None Remove="Img\ml_background.png" />
+    <None Remove="Views\hide_icon.ico" />
+    <None Remove="Views\Img\Background.jpg" />
+    <None Remove="Views\Img\Background3.webp" />
+    <None Remove="Views\Img\Background6.jpg" />
+    <None Remove="Views\Img\LoginPassword.jpg" />
+    <None Remove="Views\Img\ml_background.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,7 +29,6 @@
 
   <ItemGroup>
     <Folder Include="Services\" />
-    <Folder Include="Views\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +36,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Icons\hide_icon.ico" />
     <Resource Include="Icons\open.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
@@ -43,7 +46,15 @@
     <Resource Include="Icons\save_as.ico">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
-    <Resource Include="Img\Background.jpg" />
+    <Resource Include="Views\hide_icon.ico" />
+    <Resource Include="Views\Img\Background.jpg" />
+    <Resource Include="Views\Img\LoginPassword.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Page Update="Views\MainWindow.xaml">
+      <Generator></Generator>
+    </Page>
   </ItemGroup>
 
 </Project>

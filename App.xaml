@@ -1,9 +1,12 @@
 ﻿<Application x:Class="WpfAdminPanel.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             
-             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
-             StartupUri="MainWindow.xaml">
+             StartupUri="Views/LoginPasswordWindow.xaml">
+             <!--StartupUri="Views/MainWindow.xaml"-->
+
+
+
+
     <Application.Resources>
 
         <ResourceDictionary>

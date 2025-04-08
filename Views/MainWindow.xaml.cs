@@ -2,16 +2,29 @@
 using WpfAdminPanel.ViewModels;
 using System.Reflection;
 
-namespace WpfAdminPanel
+namespace WpfAdminPanel.Views
 {
     public partial class MainWindow : Window
     {
+        private ProductViewModelLocal _viewModel;
+
         public MainWindow()
         {
             InitializeComponent();
-            //DataContext = new ProductViewModel();
-            DataContext = new ProductViewModelLocal();
+
+            _viewModel = new ProductViewModelLocal();
+            DataContext = _viewModel;
+
             SetWindowTitle();
+
+            // Подписываемся на событие полной загрузки окна
+            
+        }
+
+        private void ClickEpt(object sender, RoutedEventArgs e)
+        {
+            StartWindow startWindow = new StartWindow();
+            startWindow.Show();
         }
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
