@@ -21,11 +21,6 @@ namespace WpfAdminPanel.Views
             
         }
 
-        private void ClickEpt(object sender, RoutedEventArgs e)
-        {
-            StartWindow startWindow = new StartWindow();
-            startWindow.Show();
-        }
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
         {

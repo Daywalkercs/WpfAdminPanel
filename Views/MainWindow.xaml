@@ -168,8 +168,5 @@
             </Border>
         </StackPanel>
 
-        <Button Grid.Row="5" Content="Ept" Click="ClickEpt" Width="100"/>
-
-
     </Grid>
 </Window>

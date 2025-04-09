@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace WpfAdminPanel.Views
 {
@@ -11,10 +12,10 @@ namespace WpfAdminPanel.Views
         {
             InitializeComponent();
 
-            
 
-            //LoginTextBox.Text = "Admin";
-            //PasswordTextBox.Password = "1234";
+
+            LoginTextBox.Text = "Admin";
+            PasswordBox_Check.Password = "1234";
         }
 
         private void ToggleVisibilityClick(object sender, RoutedEventArgs e)
@@ -64,8 +65,6 @@ namespace WpfAdminPanel.Views
                 return;
             }
 
-
-
             if (login == "Admin" && password == "1234")
             {
                 var mainWindow = new MainWindow();
@@ -76,6 +75,11 @@ namespace WpfAdminPanel.Views
             {
                 MessageBox.Show("Неверный логин или пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) LoginClick(this, new RoutedEventArgs());
         }
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
