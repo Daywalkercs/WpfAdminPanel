@@ -87,9 +87,6 @@ namespace WpfAdminPanel.ViewModels
             OpenCommand = new RelayCommand<object>(_ => OpenFile());
             SaveCommand = new RelayCommand<object>(_ => Save());
             SaveAsCommand = new RelayCommand<object>(_ => SaveAsFile());
-
-            
-            //_ = LoadProductsAsync();
         }
 
         private void Save()
@@ -133,7 +130,7 @@ namespace WpfAdminPanel.ViewModels
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ошибка при сохранении {ex.Message}", "Ошибка сохранения");
+                MessageBox.Show($"Ошибка при сохранении: {ex.Message}", "Ошибка сохранения", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -202,7 +199,7 @@ namespace WpfAdminPanel.ViewModels
         {
             if (SelectedProduct is null)
             {
-                MessageBox.Show("Выберите товар для изменения изображения");
+                MessageBox.Show("Выберите товар для изменения изображения.");
                 return;
             }
 
@@ -239,7 +236,16 @@ namespace WpfAdminPanel.ViewModels
 
         private async Task DeleteProduct()
         {
-            if (SelectedProduct == null) return;
+            if (SelectedProduct == null || _products.Count == 0)
+            {
+                MessageBox.Show("Список товаров пуст. Необходимо выбрать товар перед удалением.", "Внимание!", MessageBoxButton.OK,MessageBoxImage.Warning);
+                return;
+            }
+            else if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
+            {
+                MessageBox.Show("Перед удалением необходимо добавить либо выбрать товар.", "Внимание", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
 
             MessageBoxResult result = MessageBox.Show("Удалить этот товар?", "Подтверждение удаления", MessageBoxButton.YesNo);
             if (result == MessageBoxResult.No) return;
@@ -267,7 +273,7 @@ namespace WpfAdminPanel.ViewModels
             {
                 if (Products.Count == 0)
                 {
-                    MessageBox.Show("Список товаров пуст", "Список товаров");
+                    MessageBox.Show("Список товаров пуст", "Внимание");
                     return;
                 }
 
@@ -277,7 +283,7 @@ namespace WpfAdminPanel.ViewModels
                 // Очистка коллекции из UI потока!
                 await Application.Current.Dispatcher.InvokeAsync(() => Products.Clear());
                 
-                MessageBox.Show("Все товары удалены", "Удаление товаров");
+                MessageBox.Show("Все товары удалены.", "Удаление товаров");
             }
             catch (Exception ex)
             {

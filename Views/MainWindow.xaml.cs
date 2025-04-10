@@ -16,11 +16,23 @@ namespace WpfAdminPanel.Views
             DataContext = _viewModel;
 
             SetWindowTitle();
-
-            // Подписываемся на событие полной загрузки окна
-            
         }
 
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (DataContext is ProductViewModelLocal productViewModelLocal)
+            {
+                try
+                {
+                    await productViewModelLocal.LoadProductsAsync();
+
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Ошибка при загрузке товаров:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
+        }
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
         {
