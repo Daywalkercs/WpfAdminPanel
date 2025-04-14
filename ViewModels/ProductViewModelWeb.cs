@@ -7,11 +7,12 @@ using System.ComponentModel;
 using Microsoft.Win32;
 using System.IO;
 using System.Text.Json;
+using OnlineShop.Data.Models;
 //using static System.Net.WebRequestMethods;
 
 namespace WpfAdminPanel.ViewModels
 {
-    public class ProductViewModelLocal : INotifyPropertyChanged
+    public class ProductViewModelWeb : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
         private void OnPropertyChanged(string propertyName)
@@ -34,6 +35,8 @@ namespace WpfAdminPanel.ViewModels
 
         private string? _currentFilePath;
 
+        private readonly CarApiClient _client = new CarApiClient();
+
         private string _comboBoxText = "Выберите товар или начните вводить";
         public string ComboBoxText
         {
@@ -45,8 +48,19 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private ObservableCollection<Product> _products = new();
-        public ObservableCollection<Product> Products
+        //private ObservableCollection<Product> _products = new();
+        //public ObservableCollection<Product> Products
+        //{
+        //    get { return _products; }
+        //    set
+        //    {
+        //        _products = value;
+        //        OnPropertyChanged(nameof(Products));
+        //    }
+        //}
+
+        private ObservableCollection<Car> _products = new();
+        public ObservableCollection<Car> Products
         {
             get { return _products; }
             set
@@ -56,8 +70,8 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        private Product? _selectedProduct;
-        public Product? SelectedProduct
+        private Car? _selectedProduct;
+        public Car? SelectedProduct
         {
             get => _selectedProduct;
             set
@@ -68,9 +82,9 @@ namespace WpfAdminPanel.ViewModels
             }
         }
 
-        public ProductViewModelLocal()
+        public ProductViewModelWeb()
         {
-            LoadCommand = new RelayCommand<object>( async _ => await LoadProductsAsync());
+            LoadCommand = new RelayCommand<object>(async _ => await LoadProductsAsync());
             AddCommand = new RelayCommand<object>(async _ => await AddProduct());
             SelectImageCommand = new RelayCommand<object>(_ => SelectImage());
             DeleteCommand = new RelayCommand<object>(async _ => await DeleteProduct());
@@ -146,7 +160,7 @@ namespace WpfAdminPanel.ViewModels
             try
             {
                 string json = File.ReadAllText(filePath);
-                var products = JsonSerializer.Deserialize<ObservableCollection<Product>>(json);
+                var products = JsonSerializer.Deserialize<ObservableCollection<Car>>(json);
 
                 if (products != null)
                 {
@@ -166,11 +180,16 @@ namespace WpfAdminPanel.ViewModels
 
         public async Task LoadProductsAsync()
         {
-            await Task.Delay(100);
+            var cars = await _client.GetCarsAsync();
+            foreach (var car in cars)
+            {
+                Products.Add(car);
+            }
+            //await Task.Delay(100);
             ComboBoxText = COMBO_BOX_TEXT;
             SelectedProduct = null;
             OnPropertyChanged(nameof(SelectedProduct));
-            SelectedProduct = new Product();
+            SelectedProduct = new Car();
             OnPropertyChanged(nameof(Products));
         }
 
@@ -231,7 +250,7 @@ namespace WpfAdminPanel.ViewModels
         {
             if (SelectedProduct == null || _products.Count == 0)
             {
-                MessageBox.Show("Список товаров пуст. Необходимо выбрать товар перед удалением.", "Внимание!", MessageBoxButton.OK,MessageBoxImage.Warning);
+                MessageBox.Show("Список товаров пуст. Необходимо выбрать товар перед удалением.", "Внимание!", MessageBoxButton.OK, MessageBoxImage.Warning);
                 return;
             }
             else if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
@@ -275,7 +294,7 @@ namespace WpfAdminPanel.ViewModels
 
                 // Очистка коллекции из UI потока!
                 await Application.Current.Dispatcher.InvokeAsync(() => Products.Clear());
-                
+
                 MessageBox.Show("Все товары удалены.", "Удаление товаров");
             }
             catch (Exception ex)

@@ -9,7 +9,7 @@
         WindowStartupLocation="CenterScreen">
 
     <Window.Background>
-        <ImageBrush ImageSource="Img/Background.jpg" Stretch="UniformToFill"/>
+        <ImageBrush ImageSource="Img/Background.jpg" Stretch="UniformToFill" Opacity="1"/>
     </Window.Background>
 
     <Window.Resources>
@@ -32,7 +32,7 @@
 
         <ToolBar Grid.Row="0" VerticalAlignment="Top" ToolBarTray.IsLocked="True" Background="Gainsboro" FontSize="14">
             <Menu VerticalAlignment="Center" Background="Gainsboro" Width="Auto">
-                <MenuItem Header="Файл">
+                <MenuItem Header="Файл" FontSize="14">
                     <MenuItem DockPanel.Dock="Left" Header="Открыть" HorizontalAlignment="Left" Command="{Binding OpenCommand}">
                         <MenuItem.Icon>
                             <Image DockPanel.Dock="Right" Source="/Icons/open.ico" HorizontalAlignment="Right" Height="20" Width="20"/>
@@ -189,7 +189,16 @@
                                Visibility="{Binding SelectedProduct.Img, 
                                                     Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                    <Image Source="{Binding SelectedProduct.Img, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
+                    <!--<Image Source="{Binding SelectedProduct.FullImg, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
+                           HorizontalAlignment="Center"
+                           Stretch="Fill"
+                           Width="500"
+                           Height="230"
+                           Visibility="{Binding SelectedProduct.Img, 
+                                                 Converter={StaticResource StringToVisibilityConverter}, 
+                                                 ConverterParameter=Invert}"/>-->
+
+                    <Image Source="{Binding SelectedProduct.FullImg}"
                            HorizontalAlignment="Center"
                            Stretch="Fill"
                            Width="500"
@@ -197,6 +206,7 @@
                            Visibility="{Binding SelectedProduct.Img, 
                                                  Converter={StaticResource StringToVisibilityConverter}, 
                                                  ConverterParameter=Invert}"/>
+
                 </Grid>
             </Border>
         </StackPanel>

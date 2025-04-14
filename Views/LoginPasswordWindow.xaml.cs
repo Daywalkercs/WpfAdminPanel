@@ -59,6 +59,9 @@ namespace WpfAdminPanel.Views
             string login = LoginTextBox.Text;
             string password = PasswordBox_Check.Password;
 
+            //string login = "Admin";
+            //string password = "1234";
+
             if (string.IsNullOrWhiteSpace(login) || string.IsNullOrWhiteSpace(password))
             {
                 MessageBox.Show("Введите логин и пароль", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Warning);

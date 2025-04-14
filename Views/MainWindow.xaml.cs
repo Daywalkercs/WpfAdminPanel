@@ -6,25 +6,32 @@ namespace WpfAdminPanel.Views
 {
     public partial class MainWindow : Window
     {
-        private ProductViewModelLocal _viewModel;
+        private ProductViewModelWeb _viewModel;
 
         public MainWindow()
         {
             InitializeComponent();
 
-            _viewModel = new ProductViewModelLocal();
+            _viewModel = new ProductViewModelWeb();
             DataContext = _viewModel;
-
+            Loaded += MainWindow_Loaded;
             SetWindowTitle();
+        }
+
+
+
+        private async void CarsView_Loaded(object sender, RoutedEventArgs e)
+        {
+            await _viewModel.LoadProductsAsync();
         }
 
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            if (DataContext is ProductViewModelLocal productViewModelLocal)
+            if (DataContext is ProductViewModelWeb productViewModelWeb)
             {
                 try
                 {
-                    await productViewModelLocal.LoadProductsAsync();
+                    await productViewModelWeb.LoadProductsAsync();
 
                 }
                 catch (Exception ex)
@@ -33,6 +40,22 @@ namespace WpfAdminPanel.Views
                 }
             }
         }
+
+        //private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        //{
+        //    if (DataContext is ProductViewModelLocal productViewModelLocal)
+        //    {
+        //        try
+        //        {
+        //            await productViewModelLocal.LoadProductsAsync();
+
+        //        }
+        //        catch (Exception ex)
+        //        {
+        //            MessageBox.Show($"Ошибка при загрузке товаров:\n{ex.Message}", "Ошибка", MessageBoxButton.OK, MessageBoxImage.Error);
+        //        }
+        //    }
+        //}
 
         private void Border_PreviewDragOver(object sender, DragEventArgs e)
         {
