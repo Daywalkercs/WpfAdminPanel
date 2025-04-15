@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
+using System.Windows;
 
 public class CarApiClient
 {
@@ -12,14 +13,16 @@ public class CarApiClient
     public CarApiClient()
     {
         _httpClient = new HttpClient();
-        _httpClient.BaseAddress = new Uri("https://localhost:44378/api/"); // замени при необходимости
+
+        // Локальный Uri
+        _httpClient.BaseAddress = new Uri("https://localhost:44378/api/"); // Изменить при необходимости
     }
 
     public async Task<List<Car>> GetCarsAsync()
     {
         try
         {
-            return await _httpClient.GetFromJsonAsync<List<Car>>("carsapi") ?? new List<Car>();
+            return await _httpClient.GetFromJsonAsync<List<Car>>("CarsApi") ?? new List<Car>();
         }
         catch (Exception ex)
         {
@@ -27,4 +30,9 @@ public class CarApiClient
             return new List<Car>();
         }
     }
+
+    public async Task<bool> AddCarAsync(Car car) { return await Task.Run(() => true); }
+    public async Task<bool> DeleteCarAsync(int id) { return await Task.Run(() => true); }
+    public async Task<bool> UpdateCarAsync(Car car) { return await Task.Run(() => true); }
+    public async Task<bool> DeleteAllCarsAsync() { return await Task.Run(() => true); }
 }

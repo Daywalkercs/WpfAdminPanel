@@ -17,10 +17,25 @@ namespace WpfAdminPanel.Converters
         {
             if (value is string imagePath && !string.IsNullOrWhiteSpace(imagePath))
             {
-                if (File.Exists(imagePath))
+                try
                 {
-                    return new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                    var bitmap = new BitmapImage();
+                    bitmap.BeginInit();
+                    bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+                    bitmap.EndInit();
+                    return bitmap;
                 }
+                catch
+                {
+                    return DependencyProperty.UnsetValue;
+                }
+
+                //if (File.Exists(imagePath))
+                //{
+                //    var result = new BitmapImage(new Uri(imagePath, UriKind.Absolute));
+                //    return result;
+                //}
             }
             return DependencyProperty.UnsetValue; ;
         }

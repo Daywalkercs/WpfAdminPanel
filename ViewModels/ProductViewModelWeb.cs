@@ -230,7 +230,7 @@ namespace WpfAdminPanel.ViewModels
 
         private async Task AddProduct()
         {
-            await Task.Delay(100);
+            //await Task.Delay(100);
 
             if (string.IsNullOrWhiteSpace(SelectedProduct?.CarModel))
             {
@@ -238,11 +238,21 @@ namespace WpfAdminPanel.ViewModels
                 return;
             }
 
-            SelectedProduct.Id = Products.Count + 1;
-            Products.Add(SelectedProduct);
-            OnPropertyChanged(nameof(Products));
-            MessageBox.Show("Товар добавлен");
-            await LoadProductsAsync();
+            bool success = await _client.AddCarAsync(SelectedProduct);
+
+            if (success)
+            {
+                MessageBox.Show("Товар добавлен");
+                await LoadProductsAsync();
+            }
+            else MessageBox.Show("Ошибка при добавлении товара.");
+
+
+            //SelectedProduct.Id = Products.Count + 1;
+            //Products.Add(SelectedProduct);
+            //OnPropertyChanged(nameof(Products));
+            //MessageBox.Show("Товар добавлен");
+            //await LoadProductsAsync();
         }
 
 

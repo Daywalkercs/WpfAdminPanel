@@ -74,7 +74,7 @@
         <ComboBox Grid.Row="1" Style="{StaticResource CustomComboBoxStyle}"
                   Margin="5,5,5,0" 
                   IsEditable="True"
-                  Text="{Binding ComboBoxText, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"
+                  Text="{Binding ComboBoxText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   ItemsSource="{Binding Products, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   SelectedItem="{Binding SelectedProduct, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                   DisplayMemberPath="CarModel" FontSize="14"/>
@@ -189,16 +189,7 @@
                                Visibility="{Binding SelectedProduct.Img, 
                                                     Converter={StaticResource StringToVisibilityConverter}}"/>
 
-                    <!--<Image Source="{Binding SelectedProduct.FullImg, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
-                           HorizontalAlignment="Center"
-                           Stretch="Fill"
-                           Width="500"
-                           Height="230"
-                           Visibility="{Binding SelectedProduct.Img, 
-                                                 Converter={StaticResource StringToVisibilityConverter}, 
-                                                 ConverterParameter=Invert}"/>-->
-
-                    <Image Source="{Binding SelectedProduct.FullImg}"
+                    <Image Source="{Binding SelectedProduct.FullImg, Converter={StaticResource ImagePathConverter}}"
                            HorizontalAlignment="Center"
                            Stretch="Fill"
                            Width="500"
@@ -206,6 +197,15 @@
                            Visibility="{Binding SelectedProduct.Img, 
                                                  Converter={StaticResource StringToVisibilityConverter}, 
                                                  ConverterParameter=Invert}"/>
+
+                    <!--<Image Source="{Binding SelectedProduct.Img, Mode=TwoWay, Converter={StaticResource ImagePathConverter}}"
+                           HorizontalAlignment="Center"
+                           Stretch="Fill"
+                           Width="500"
+                           Height="230"
+                           Visibility="{Binding SelectedProduct.Img, 
+                                                 Converter={StaticResource StringToVisibilityConverter}, 
+                                                 ConverterParameter=Invert}"/>-->
 
                 </Grid>
             </Border>
