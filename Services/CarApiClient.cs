@@ -31,7 +31,19 @@ public class CarApiClient
         }
     }
 
-    public async Task<bool> AddCarAsync(Car car) { return await Task.Run(() => true); }
+    public async Task<bool> AddCarAsync(Car car)
+    {
+        try
+        {
+            var response = await _httpClient.PostAsJsonAsync("CarsApi", car);
+            return response.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine($"Ошибка при добавлении: {ex.Message}");
+            return false;
+        }
+    }
     public async Task<bool> DeleteCarAsync(int id) { return await Task.Run(() => true); }
     public async Task<bool> UpdateCarAsync(Car car) { return await Task.Run(() => true); }
     public async Task<bool> DeleteAllCarsAsync() { return await Task.Run(() => true); }

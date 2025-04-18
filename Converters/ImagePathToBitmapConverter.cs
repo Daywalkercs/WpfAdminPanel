@@ -22,7 +22,9 @@ namespace WpfAdminPanel.Converters
                     var bitmap = new BitmapImage();
                     bitmap.BeginInit();
                     bitmap.UriSource = new Uri(imagePath, UriKind.Absolute);
-                    bitmap.CacheOption = BitmapCacheOption.OnLoad;
+
+                    // OnLoad - аналог using. Освобождает файл сразу после загрузки, чтобы не файл не блокировался
+                    bitmap.CacheOption = BitmapCacheOption.OnLoad; 
                     bitmap.EndInit();
                     return bitmap;
                 }

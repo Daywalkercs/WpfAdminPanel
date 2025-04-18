@@ -8,6 +8,7 @@ using Microsoft.Win32;
 using System.IO;
 using System.Text.Json;
 using OnlineShop.Data.Models;
+using System.Diagnostics;
 //using static System.Net.WebRequestMethods;
 
 namespace WpfAdminPanel.ViewModels
@@ -143,10 +144,13 @@ namespace WpfAdminPanel.ViewModels
 
         private void OpenFile()
         {
+            string dataPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Data");
+
             var openDialog = new OpenFileDialog
             {
                 Filter = "Json файлы (*.json)|*.json|Все файлы (*.*) | *.*",
-                Title = "Открыть файл"
+                Title = "Открыть файл",
+                InitialDirectory = dataPath
             };
 
             if (openDialog.ShowDialog() == true)
@@ -237,6 +241,15 @@ namespace WpfAdminPanel.ViewModels
                 MessageBox.Show("Поле \"Модель\" обязательно для заполнения!");
                 return;
             }
+
+            Debug.WriteLine($"CarModel: {SelectedProduct.CarModel}");
+            Debug.WriteLine($"ShortDescription: {SelectedProduct.ShortDescription}");
+            Debug.WriteLine($"LongDescription: {SelectedProduct.LongDescription}");
+            Debug.WriteLine($"Img: {SelectedProduct.Img}");
+            Debug.WriteLine($"Price: {SelectedProduct.Price}");
+            Debug.WriteLine($"IsFavourite: {SelectedProduct.IsFavourite}");
+            Debug.WriteLine($"Available: {SelectedProduct.Available}");
+            Debug.WriteLine($"CategoryID: {SelectedProduct.CategoryID}");
 
             bool success = await _client.AddCarAsync(SelectedProduct);
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace OnlineShop.Data.Models
@@ -15,6 +16,7 @@ namespace OnlineShop.Data.Models
         public string Img { get; set; } = "";
 
         // Абсолютный путь к изображению
+        [JsonIgnore]
         public string FullImg
         {
             get
